@@ -4,6 +4,18 @@ A reusable library for Grok Bot coordination and Cursor engineering agents, main
 
 This is a separate repository, not a GitHub fork. The upstream snapshot is [mattpocock/skills at 49dd158d1076](https://github.com/mattpocock/skills/tree/49dd158d1076134a641b33efb035946536778336). Upstream content is preserved byte-for-byte; [NOTICE.md](NOTICE.md) and [upstream-lock.json](upstream-lock.json) record attribution and provenance. Experimental and miscellaneous skills are intentionally excluded.
 
+## Install with the skills CLI
+
+Node.js 22.20 or newer is what the skills CLI asks for. The CLI copies each selected skill folder into `.agents/skills`. It installs Matt Pocock's skills, `crew-plan`, `crew-gitflow`, `crew-architecture`, and `setup-crew`. It does not copy `.cursor/agents`, `AGENTS.md`, or `docs/agents`.
+
+Install `setup-crew`, then run that skill in the project. The skill's helper copies the seven role files, merges the crew block into `AGENTS.md`, and copies `docs/agents` without replacing local edits.
+
+```bash
+npx skills@latest add MalcomnM/cursor-crew-skills --agent cursor --skill setup-crew -y
+```
+
+Omit `--skill` to pick skills interactively. Skill names are exact; the CLI does not expand globs. Details and the project-local installer are in [Installation and updates](docs/INSTALL.md).
+
 ## Start with a project
 
 Clone this library outside your application repo, select a reviewed release, preview installation, then apply it on a configuration branch:

@@ -1,0 +1,22 @@
+{
+  "name": "cursor-crew-skills",
+  "owner": {
+    "name": "MalcomnM"
+  },
+  "metadata": {
+    "description": "Selected Matt Pocock skills and a Grok Bot / Cursor Git Flow crew. Read by the skills CLI. Cursor repository install keeps using .cursor-plugin.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "matt-pocock-skills",
+      "source": "./plugins/matt-pocock-skills",
+      "description": "Pinned engineering and productivity skills by Matt Pocock. MIT licensed."
+    },
+    {
+      "name": "cursor-crew",
+      "source": "./plugins/cursor-crew",
+      "description": "Grok Bot coordination, Cursor specialists, and feature squash integration."
+    }
+  ]
+}
