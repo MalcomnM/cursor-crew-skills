@@ -2,6 +2,20 @@
 
 Use a reviewed tag or exact commit of https://github.com/MalcomnM/cursor-crew-skills. Keep the checkout outside the target application repo. Python 3.9+ and Git are required; the installer uses only Python's standard library and does not download or execute upstream scripts.
 
+## Skills CLI
+
+The skills CLI is the same install path as [vera](https://github.com/MalcomnM/vera): `npx skills@latest add` copies skill directories that contain `SKILL.md`. Node.js 22.20 or newer is the version the CLI recommends (`engines.node` on skills 1.7.1). Cursor's install directory for that CLI is `.agents/skills`.
+
+```bash
+npx skills@latest add MalcomnM/cursor-crew-skills --agent cursor --skill setup-crew -y
+```
+
+Omit `--skill` to choose interactively. The list is the 27 Matt Pocock skills, `crew-plan`, `crew-gitflow`, `crew-architecture`, and `setup-crew`. Names are exact.
+
+The CLI stops at the skill folder. It does not read `.cursor-plugin`, and it does not install `.cursor/agents`, `AGENTS.md`, or `docs/agents`. After `setup-crew` is installed, run that skill. Its helper is `scripts/copy_assets.py` inside the skill folder (`--dry-run` prints the plan and writes nothing). The helper copies the seven `grok-*.md` roles into `.cursor/agents/`, merges the marked crew block into an existing `AGENTS.md` without changing the surrounding text, and copies `docs/agents/*` only when those files are absent. A role file that already differs is left in place and reported. The skill then asks for the tracker, labels, branch names, and test commands, writes them into `docs/agents/PROJECT.md`, and sets status `BLOCKED` until those settings are confirmed. It does not push, tag, or change branch settings.
+
+`scripts/install.py` remains the path that pins `.cursor/skills`, roles, and `docs/agents` in one lockfile. Use one installation source per skill name. The Cursor "From GitHub Repository" plugins are unchanged and still use `.cursor-plugin`.
+
 ## New project
 
 Create an ordinary Git repository and its initial commit first. On a configuration feature branch, run the preview and apply commands from README.md. If develop does not yet exist, the Grok Bot setup prompt explains the limited bootstrap that creates it from main. The installer itself changes files only; it never creates or switches branches.
