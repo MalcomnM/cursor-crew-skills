@@ -1,0 +1,11 @@
+{
+  "name": "matt-pocock-skills",
+  "version": "0.1.0",
+  "description": "Selected upstream engineering and productivity skills with original references and invocation flags.",
+  "author": {
+    "name": "Matt Pocock"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/MalcomnM/cursor-crew-skills",
+  "skills": "./skills"
+}

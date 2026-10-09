@@ -1,0 +1,12 @@
+{
+  "name": "cursor-crew",
+  "version": "0.1.0",
+  "description": "Scoped Cursor engineering roles coordinated by Grok Bot, with independent review and Git Flow.",
+  "author": {
+    "name": "MalcomnM"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/MalcomnM/cursor-crew-skills",
+  "skills": "./skills",
+  "agents": "./agents"
+}
