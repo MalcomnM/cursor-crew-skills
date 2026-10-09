@@ -1,3 +1,9 @@
+# Cursor Crew Skills
+
+This repository is the crew library and also an opted-in crew project. Edit library sources in plugins/, templates/, scripts/, and grok-bot/. The .cursor/skills, .cursor/agents, .cursor/crew-licenses, and docs/agents/WORKFLOW.md and SKILL-ROUTING.md copies are installer output pinned by .cursor/crew-lock.json; refresh them only in a separate reviewed configuration change by running scripts/install.py from a clean checkout outside this repository. Files listed in upstream-lock.json stay byte-for-byte unchanged except through docs/UPSTREAM.md.
+
+Required checks: `python3 scripts/validate.py` and `python3 -m unittest discover -s tests -v`.
+
 <!-- BEGIN GROK CURSOR CREW -->
 # Grok Bot and Cursor crew
 
