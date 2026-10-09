@@ -26,6 +26,54 @@ def outside_fences(text):
     return '\n'.join(lines)
 
 
+def setup_crew_asset_errors(root):
+    errors = []
+    asset_root = root / 'skills/crew/setup-crew/assets'
+    expected = {
+        'project/AGENTS.md': 'templates/project/AGENTS.md',
+        'project/docs/agents/PROJECT.md': 'templates/project/docs/agents/PROJECT.md',
+        'project/docs/agents/SKILL-ROUTING.md': 'templates/project/docs/agents/SKILL-ROUTING.md',
+        'project/docs/agents/WORKFLOW.md': 'templates/project/docs/agents/WORKFLOW.md',
+    }
+    for name in ('architect', 'builder', 'debugger', 'prototyper', 'researcher', 'reviewer', 'shipper'):
+        expected['agents/grok-' + name + '.md'] = 'plugins/cursor-crew/agents/grok-' + name + '.md'
+    if not asset_root.is_dir():
+        return ['Missing setup-crew assets']
+    found = {p.relative_to(asset_root).as_posix() for p in asset_root.rglob('*') if p.is_file()}
+    if found != set(expected):
+        errors.append('setup-crew asset set drift: ' + ', '.join(sorted(found.symmetric_difference(expected))))
+    for rel, src in expected.items():
+        bundled = asset_root / rel
+        source = root / src
+        if not bundled.is_file() or bundled.is_symlink() or bundled.read_bytes() != source.read_bytes():
+            errors.append('setup-crew asset drift: ' + rel)
+    return errors
+
+
+def skills_cli_manifest_errors(root):
+    errors = []
+    manifest_path = root / '.claude-plugin/marketplace.json'
+    try:
+        manifest = json.loads(manifest_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return ['Unreadable skills CLI marketplace manifest']
+    plugins = manifest.get('plugins') or []
+    sources = {plugin.get('source') for plugin in plugins}
+    required = {'./plugins/matt-pocock-skills', './plugins/cursor-crew'}
+    if sources != required:
+        errors.append('Skills CLI marketplace plugins drifted')
+    for source in sources:
+        if not isinstance(source, str) or not source.startswith('./') or '..' in Path(source).parts:
+            errors.append('Unsafe skills CLI plugin source')
+            continue
+        if not (root / source / 'skills').is_dir():
+            errors.append('Skills CLI plugin skills directory missing: ' + source)
+    skill = root / 'skills/crew/setup-crew/SKILL.md'
+    if not skill.is_file() or not skill.read_text().startswith('---\nname: setup-crew\n'):
+        errors.append('setup-crew skill is not discoverable')
+    return errors
+
+
 def main():
     errors=[]
     lock=json.loads((ROOT/'upstream-lock.json').read_text())
@@ -89,6 +137,8 @@ def main():
         p=ROOT/f'plugins/cursor-crew/agents/grok-{name}.md'
         if 'SKILL-ROUTING.md' not in p.read_text():
             errors.append('Missing role skill routing: '+name)
+    errors.extend(setup_crew_asset_errors(ROOT))
+    errors.extend(skills_cli_manifest_errors(ROOT))
     if errors:
         print('\n'.join(errors),file=sys.stderr)
         return 1
